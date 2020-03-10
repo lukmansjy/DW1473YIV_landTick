@@ -1,5 +1,5 @@
 const initialState = {
-    data: [],
+    name: null,
     admin: null,
     dataError:[],
     isLoading: false,
@@ -24,6 +24,7 @@ const users = (state = initialState, action) => {
                 isLoading: false,
                 loginStatus: true,
                 dataError: [],
+                name: action.payload.data.name,
                 admin: action.payload.data.admin
             }
         case 'POST_USER_LOGIN_REJECTED':
@@ -56,12 +57,11 @@ const users = (state = initialState, action) => {
                 isLoading: true
             }
         case 'USER_LOGIN_TOKEN_FULFILLED':
-            console.log('DATA ADMIN', action.payload)
             return {
                 ...state,
                 isLoading: false,
                 loginStatus: true,
-                dataError: [],
+                name: action.payload.data.name,
                 admin: action.payload.data.admin
             }
         case 'USER_LOGIN_TOKEN_REJECTED':
@@ -74,11 +74,10 @@ const users = (state = initialState, action) => {
         // LOGOUT
         case 'USER_LOGOUT':
             return {
-                data: [],
-                dataError:[],
                 admin: null,
                 isLoading: false,
-                error: false
+                error: false,
+                dataError: []
             }
 
         // USER REGISTER
@@ -92,8 +91,9 @@ const users = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                data: action.payload.data,
-                loginStatus: true
+                loginStatus: true,
+                name: action.payload.data.name,
+                admin: action.payload.data.admin
             }
         case 'POST_USER_REGISTER_REJECTED':
             return {

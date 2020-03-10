@@ -1,9 +1,8 @@
 import React from 'react'
-import {Container, Row, Col, Modal, Form} from 'react-bootstrap'
+import { Modal } from 'react-bootstrap'
 import Loading from './Loading'
 
 const ModalLogin = (props) =>{
-    console.log(props.dataError, props.isLoading)
     return(
         <Modal show={props.show} onHide={props.handleModalLogin} className="modalContent">
             <div>
@@ -12,8 +11,8 @@ const ModalLogin = (props) =>{
             </div>
             <form onSubmit={props.handleLogin}>
                 <div className="formModal">
-                    <input type="text" className="myInputText mb-4" name="username" placeholder="Username"/><br/>
-                    <input type="password" className="myInputText mb-4" name="password" placeholder="Password"/><br/>
+                    <input type="text" className="myInputText mb-4 pl-1" name="username" placeholder="Username"/><br/>
+                    <input type="password" className="myInputText mb-4 pl-1" name="password" placeholder="Password"/><br/>
                     
                     {props.dataError ? <p className="errorMsg">{props.dataError.message}</p> : null}
                     {props.isLoading ? <Loading/> : <button type="submit" className="btnModal hoverBtnDrak">Login</button>}

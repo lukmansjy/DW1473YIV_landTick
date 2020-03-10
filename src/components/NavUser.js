@@ -1,30 +1,34 @@
-import React, { Fragment } from 'react'
-import { DropdownButton, Dropdown, SplitButton } from 'react-bootstrap'
+import React from 'react'
+import { Dropdown, DropdownButton } from 'react-bootstrap'
+import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { userLogout } from '../_actions/usersA'
+
 
 const NavUser = (props) =>{
-
     const handleSelect = (eventKey) =>{
-        console.log(eventKey)
+        if(eventKey === "3"){
+            window.localStorage.removeItem('token')
+            props.userLogout()
+            props.handleLogout()
+        }
     }
-
     return(
         <div>
-            {/* <span>Lukman Sanjaya</span> */}
             <div>
                 {/* <img src={require('../assets/icons/user-white-icon.png')}/> */}
-                <label for="dropdown-menu" className="labelClassWraperProileNav">
-                    <p>Lukman Sanjaya</p> 
+                <label htmlFor="dropdown-menu" className="labelClassWraperProileNav">
+                    <p>{props.user.name}</p> 
                     <div className="classWraperProileNav">
-                        <img className src={require('../assets/icons/user-white-icon.png')}/>
+                        <img src={require('../assets/icons/user-white-icon.png')} alt="user"/>
                     </div>
                 </label>
-                <DropdownButton drop='left' id="dropdown-menu" onSelect={handleSelect} className="dropdwonMenuUser">
+                <DropdownButton drop='left' id="dropdown-menu" title="" onSelect={handleSelect} className="dropdwonMenuUser">
                     
                         <Dropdown.Item as="button" eventKey={1}>
                             <Link to="/ticket">
                                 <span className="listMenuUser">
-                                    <img src={require('../assets/icons/ticket-icon.png')} width="30px"/>
+                                    <img src={require('../assets/icons/ticket-icon.png')} width="30px" alt="ticket"/>
                                     <span>Tiket Saya</span>
                                 </span>
                             </Link>
@@ -33,7 +37,7 @@ const NavUser = (props) =>{
                         <Dropdown.Item as="button" eventKey={2}>
                             <Link to="/payment">
                                 <span className="listMenuUser">
-                                    <img src={require('../assets/icons/payment-icon.png')} width="30px"/>
+                                    <img src={require('../assets/icons/payment-icon.png')} width="30px" alt="payment"/>
                                     <span>Payment</span>
                                 </span>
                             </Link>
@@ -41,7 +45,7 @@ const NavUser = (props) =>{
 
                         <Dropdown.Item as="button" eventKey={3}>
                             <span className="listMenuUser logutMenuList">
-                                <img src={require('../assets/icons/logout-icon.png')} width="28px"/>
+                                <img src={require('../assets/icons/logout-icon.png')} width="28px" alt="logout"/>
                                 <span>Logout</span>
                             </span>
                         </Dropdown.Item>
@@ -53,4 +57,16 @@ const NavUser = (props) =>{
     )
 }
 
-export default NavUser
+const mapStateToProps = (state) =>{
+    return{
+        user: state.users
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        userLogout: ()=> dispatch( userLogout() )
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavUser)

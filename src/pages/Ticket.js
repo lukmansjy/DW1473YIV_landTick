@@ -1,35 +1,56 @@
 import React, { Component } from 'react';
-import NavUser from '../components/NavUser';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CardTicket from '../components/CardTicket';
+import Navbar from '../components/Navbar';
+import { getAllOrders } from '../_actions/ordersA';
+import { userLoginToken } from '../_actions/usersA';
+
 
 class Ticket extends Component{
+
+  componentDidMount(){
+    if(!this.props.user.loginStatus){
+        const token = window.localStorage.getItem('token')
+        if(token){
+            this.props.userLoginToken(token)
+        }
+    }
+      this.props.getAllOrders()
+  }
 
   render(){
     return(
       <div>
-        <div className="navbar">
-            <Link to="/">
-              <div className="navBarLeft">
-                  <span>LandTick</span>
-                  <img src={require('../assets/icons/brand-icon.png')} className="brandIconNav"/>
-              </div>
-              </Link>
-              <div className="navBarRight">
-                  <NavUser/>
-                  {/* {this.props.user.loginStatus ? 'Masok' : <NavLogin handleModalLogin={this.handleModalLogin}/>} */}
-              </div> 
-        </div>
+        <Navbar user={this.props.user}/>
         <div>
-          <h3 class="title">Tiket Saya</h3>
+          <h3 className="title">List Transaksi Tiket</h3>
         </div>
-        <CardTicket/>
-        <CardTicket/>
-        <CardTicket/>
+        {this.props.dataTicketsUser.reverse().map((ticket, index)=>(
+          <CardTicket key={index} ticket={ticket}/>
+        ))}
+        {this.props.dataTicketsUser.length === 0 ? 
+          <h6 className="pt-4">
+            <center>Kamu belum pernah order tiket, silakan order tiket di <Link to="/">Home page</Link>.</center>
+          </h6> : null}
         
       </div>
     )
   }
 }
 
-export default Ticket
+const mapStateToProps = (state) =>{
+  return{
+      user: state.users,
+      dataTicketsUser: state.orders.dataTicketsUser
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      userLoginToken: (token)=> dispatch( userLoginToken(token) ),
+      getAllOrders: ()=> dispatch( getAllOrders() )
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Ticket)

@@ -13,21 +13,20 @@ export const userLogin = (data)=>{
     }
 }
 
-export const userLoginToken = (data)=>{
+export const userLoginToken = (token)=>{
     return {
         type: 'USER_LOGIN_TOKEN',
         payload: axios({
-            method: 'POST',
-            url: `${baseUrlApiVersion}/loginToken`,
+            method: 'GET',
+            url: `${baseUrlApiVersion}/login_token`,
             headers: {
-                Authorization: `Bearer ${data.token}`
-            },
-            data: data
+                Authorization: `Bearer ${token}`
+            }
         })
     }
 }
 
-export const destroyStore = ()=>{
+export const userLogout = ()=>{
     return {
         type: 'USER_LOGOUT',
         payload: null
